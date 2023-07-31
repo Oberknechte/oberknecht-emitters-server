@@ -129,7 +129,7 @@ export async function handleConnection(sym: string, ws: WebSocket) {
         let password = params.password;
 
         if (
-          this._options.serverPassword &&
+          i.oberknechtEmitterServerData[sym]._options.serverPassword &&
           (!password ||
             password !==
               i.oberknechtEmitterServerData[sym]._options.serverPassword)

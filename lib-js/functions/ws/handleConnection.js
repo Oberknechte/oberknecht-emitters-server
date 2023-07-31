@@ -93,7 +93,7 @@ async function handleConnection(sym, ws) {
         switch (type) {
             case "login": {
                 let password = params.password;
-                if (this._options.serverPassword &&
+                if (__1.i.oberknechtEmitterServerData[sym]._options.serverPassword &&
                     (!password ||
                         password !==
                             __1.i.oberknechtEmitterServerData[sym]._options.serverPassword))
