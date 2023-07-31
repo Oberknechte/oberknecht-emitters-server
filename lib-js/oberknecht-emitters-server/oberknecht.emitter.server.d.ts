@@ -3,8 +3,9 @@ import { oberknechtEmitterServerOptions } from "../types/oberknecht.emitter.serv
 export declare class oberknechtEmitterServer {
     #private;
     get symbol(): string;
-    _options: any;
-    emitter: oberknechtEmitter;
+    get _options(): any;
+    set _options(options: any);
+    oberknechtEmitter: oberknechtEmitter;
     constructor(options: oberknechtEmitterServerOptions);
     connect(): Promise<void>;
 }

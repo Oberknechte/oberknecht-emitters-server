@@ -4,7 +4,8 @@ import { oberknechtEmitter } from "oberknecht-emitters";
 export declare class oberknechtEmitterClient {
     #private;
     get symbol(): string;
-    _options: any;
+    get _options(): oberknechtEmitterClientOptions;
+    set _options(options: oberknechtEmitterClientOptions);
     websocket: WebSocket;
     emitter: oberknechtEmitter;
     constructor(options: oberknechtEmitterClientOptions);

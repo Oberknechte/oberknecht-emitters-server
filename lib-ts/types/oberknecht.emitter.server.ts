@@ -2,6 +2,7 @@ import { oberknechtEmitterOptions } from "oberknecht-emitters/lib-ts/types/oberk
 import { WebSocketServer } from "ws";
 
 export type oberknechtEmitterServerOptions = {
+  debug?: number;
   serverPort?: number;
   serverPassword?: string;
   maxPingsPending?: number;

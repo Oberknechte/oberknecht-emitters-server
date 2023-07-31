@@ -12,13 +12,23 @@ class oberknechtEmitterClient {
     get symbol() {
         return this.#symbol;
     }
-    _options = __1.i.oberknechtEmitterClientData[this.symbol]?._options ?? {};
+    get _options() {
+        return ((0, oberknecht_utils_1.getKeyFromObject)(__1.i.oberknechtEmitterClientData, [
+            this.symbol,
+            "_options",
+        ]) ?? {});
+    }
+    set _options(options) {
+        (0, oberknecht_utils_1.addKeysToObject)(__1.i.oberknechtEmitterClientData, [this.symbol, "_options"], options);
+    }
     websocket = __1.i.oberknechtEmitterWebsocketClient[this.symbol];
     emitter = new oberknecht_emitters_1.oberknechtEmitter();
     constructor(options) {
         let _options = options ?? {};
         (0, oberknecht_utils_1.addKeysToObject)(__1.i.oberknechtEmitterClientData, [this.symbol, "_options"], _options);
-        __1.i.oberknechtClientEmitters[this.symbol] = new oberknecht_emitters_1.oberknechtEmitter();
+        __1.i.oberknechtClientEmitters[this.symbol] = this.emitter;
+        if (_options.clientEmitterOptions)
+            this.emitter._options = _options.clientEmitterOptions;
     }
     async connect() {
         return new Promise((resolve, reject) => {
@@ -26,7 +36,8 @@ class oberknechtEmitterClient {
                 `ws://127.0.0.1:${this._options.serverPort ?? defaults_1.defaultEmitterServerPort}`));
             (0, oberknecht_utils_1.addKeysToObject)(__1.i.oberknechtEmitterClientData, [this.symbol, "messageSymNum"], 0);
             ws.on("open", () => {
-                console.log("ws opened");
+                if (this._options.debug >= 2)
+                    (0, oberknecht_utils_1.log)(1, `WS Connection Opened`);
                 if (this._options.serverPassword)
                     return this.sendWC({
                         type: "login",
@@ -54,6 +65,10 @@ class oberknechtEmitterClient {
                     this.emitter.emit(`ws:message:${message.pass}`, message);
                 if (message.type === "callback")
                     this.emitter.emit(`ws:message:callback:${message.callbackID}`, message);
+            });
+            ws.on("close", (code, reason) => {
+                if (this._options.debug > 2)
+                    (0, oberknecht_utils_1.log)(2, `WS Connection Closed`, code, reason);
             });
         });
     }

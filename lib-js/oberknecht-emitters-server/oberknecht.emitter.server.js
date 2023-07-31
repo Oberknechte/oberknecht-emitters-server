@@ -13,12 +13,23 @@ class oberknechtEmitterServer {
     get symbol() {
         return this.#symbol;
     }
-    _options = __1.i.oberknechtEmitterServerData[this.symbol]?._options ?? {};
-    emitter = __1.i.oberknechtServerEmitters[this.symbol];
+    get _options() {
+        return (0, oberknecht_utils_1.getKeyFromObject)(__1.i.oberknechtEmitterServerData, [
+            this.symbol,
+            "_options",
+        ]);
+    }
+    set _options(options) {
+        (0, oberknecht_utils_1.addKeysToObject)(__1.i.oberknechtEmitterServerData, [this.symbol, "_options"], options);
+    }
+    oberknechtEmitter = new oberknecht_emitters_1.oberknechtEmitter();
     constructor(options) {
         let _options = options ?? {};
+        _options.debug = _options.debug ?? 2;
         (0, oberknecht_utils_1.addKeysToObject)(__1.i.oberknechtEmitterServerData, [this.symbol, "_options"], _options);
-        __1.i.oberknechtServerEmitters[this.symbol] = new oberknecht_emitters_1.oberknechtEmitter(_options.emitterOptions);
+        __1.i.oberknechtServerEmitters[this.symbol] = this.oberknechtEmitter;
+        if (_options.emitterOptions)
+            this.oberknechtEmitter._options = _options.emitterOptions;
     }
     async connect() {
         return new Promise((resolve, reject) => {
@@ -27,7 +38,20 @@ class oberknechtEmitterServer {
                 port: this._options.serverPort ?? defaults_1.defaultEmitterServerPort,
             }));
             server.on("listening", () => {
+                if (this._options.debug > 2)
+                    (0, oberknecht_utils_1.log)(1, 
+                    // @ts-ignore
+                    `WSServer Listening on ${server.address().address} (${
+                    // @ts-ignore
+                    server.address().family
+                    // @ts-ignore
+                    }) port ${server.address().port}`);
+                this.oberknechtEmitter.emit(["wsserver", "wsserver:listening"], "Listening");
                 resolve();
+            });
+            server.on("error", (e) => {
+                process.emitWarning(e);
+                this.oberknechtEmitter.emitError(["wsserver", "wsserver:error"], e);
             });
             server.on("connection", async (ws) => {
                 (0, handleConnection_1.handleConnection)(this.symbol, ws);

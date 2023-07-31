@@ -72,11 +72,9 @@ export async function handleConnection(sym: string, ws: WebSocket) {
     heartbeatPong();
   });
 
-  ws.onopen = (ev) => {};
-
-  ws.onmessage = (rawMessage_) => {
+  ws.on("message", (rawMessage_) => {
     // @ts-ignore
-    let rawMessage = Buffer.from(rawMessage_.data).toString("utf-8");
+    let rawMessage = Buffer.from(rawMessage_).toString("utf-8");
     const messageID = `ws-message:${wsData.messageSymNum++}`;
 
     let type;
@@ -261,5 +259,9 @@ export async function handleConnection(sym: string, ws: WebSocket) {
         return sendWC({ error: Error("type not found") }, 404);
       }
     }
-  };
+  });
+
+  ws.on("close", () => {
+    closeWS();
+  });
 }

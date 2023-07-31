@@ -1,6 +1,6 @@
 {
   "name": "oberknecht-emitters-server",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "export",
   "scripts": {
@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/Oberknechte/oberknecht-emitters-server#readme",
   "dependencies": {
-    "oberknecht-emitters": "^1.0.6",
+    "oberknecht-emitters": "^1.0.7",
     "oberknecht-utils": "^1.5.3",
     "ws": "^8.13.0"
   },

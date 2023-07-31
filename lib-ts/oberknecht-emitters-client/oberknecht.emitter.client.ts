@@ -2,6 +2,7 @@ import {
   addAppendKeysToObject,
   addKeysToObject,
   getKeyFromObject,
+  log,
   returnErr,
 } from "oberknecht-utils";
 import {
@@ -20,7 +21,22 @@ export class oberknechtEmitterClient {
     return this.#symbol;
   }
 
-  _options = i.oberknechtEmitterClientData[this.symbol]?._options ?? {};
+  get _options(): oberknechtEmitterClientOptions {
+    return (
+      getKeyFromObject(i.oberknechtEmitterClientData, [
+        this.symbol,
+        "_options",
+      ]) ?? {}
+    );
+  }
+
+  set _options(options) {
+    addKeysToObject(
+      i.oberknechtEmitterClientData,
+      [this.symbol, "_options"],
+      options
+    );
+  }
 
   websocket = i.oberknechtEmitterWebsocketClient[this.symbol];
 
@@ -35,7 +51,9 @@ export class oberknechtEmitterClient {
       _options
     );
 
-    i.oberknechtClientEmitters[this.symbol] = new oberknechtEmitter();
+    i.oberknechtClientEmitters[this.symbol] = this.emitter;
+    if (_options.clientEmitterOptions)
+      this.emitter._options = _options.clientEmitterOptions;
   }
 
   async connect() {
@@ -54,7 +72,7 @@ export class oberknechtEmitterClient {
       );
 
       ws.on("open", () => {
-        console.log("ws opened");
+        if (this._options.debug >= 2) log(1, `WS Connection Opened`);
 
         if (this._options.serverPassword)
           return this.sendWC({
@@ -89,6 +107,11 @@ export class oberknechtEmitterClient {
             `ws:message:callback:${message.callbackID}`,
             message
           );
+      });
+
+      ws.on("close", (code, reason) => {
+        if (this._options.debug > 2)
+          log(2, `WS Connection Closed`, code, reason);
       });
     });
   }
