@@ -14,4 +14,5 @@ export declare class oberknechtEmitterClient {
     sendWC(stuff: any, status?: number): Promise<unknown>;
     on(eventName: string | string[], cb: typeof callbackFunction): Promise<unknown>;
     emit(eventName: string | string[], data: any): Promise<unknown>;
+    emitCB(eventName: string | string[], data: any): Promise<unknown>;
 }

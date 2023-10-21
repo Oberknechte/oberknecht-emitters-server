@@ -132,5 +132,18 @@ class oberknechtEmitterClient {
                 .catch(reject);
         });
     }
+    async emitCB(eventName, data) {
+        return new Promise((resolve, reject) => {
+            this.sendWC({
+                type: "emitCB",
+                params: {
+                    eventName: eventName,
+                    data: data,
+                },
+            })
+                .then(resolve)
+                .catch(reject);
+        });
+    }
 }
 exports.oberknechtEmitterClient = oberknechtEmitterClient;

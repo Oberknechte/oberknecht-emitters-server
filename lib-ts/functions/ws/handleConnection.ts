@@ -206,6 +206,23 @@ export async function handleConnection(sym: string, ws: WebSocket) {
         });
       }
 
+      case "emitCB": {
+        let eventName = params.eventName;
+        let emitData = params.data;
+        if (!eventName)
+          return sendWC({ error: Error("params.eventName is undefined") });
+
+        function cb(...dat) {
+          return sendWC({
+            type: "callback",
+            callbackData: dat,
+          });
+        }
+
+        emitter["emit"](eventName, emitData, cb);
+        break;
+      }
+
       case "removeListener": {
         let eventName = params.eventName;
         let callbackID = params.callbackID;
