@@ -39,7 +39,7 @@ export class oberknechtEmitterClient {
   }
 
   get isConnected() {
-    return this.websocket.readyState === 1;
+    return this.websocket?.readyState === 1;
   }
 
   websocket = i.oberknechtEmitterWebsocketClient[this.symbol];
