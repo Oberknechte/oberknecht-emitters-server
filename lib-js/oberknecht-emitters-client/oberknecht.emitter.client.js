@@ -21,6 +21,9 @@ class oberknechtEmitterClient {
     set _options(options) {
         (0, oberknecht_utils_1.addKeysToObject)(__1.i.oberknechtEmitterClientData, [this.symbol, "_options"], options);
     }
+    get isConnected() {
+        return this.websocket.readyState === 1;
+    }
     websocket = __1.i.oberknechtEmitterWebsocketClient[this.symbol];
     emitter = new oberknecht_emitters_1.oberknechtEmitter();
     constructor(options) {

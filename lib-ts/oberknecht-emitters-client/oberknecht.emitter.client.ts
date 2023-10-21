@@ -38,6 +38,10 @@ export class oberknechtEmitterClient {
     );
   }
 
+  get isConnected() {
+    return this.websocket.readyState === 1;
+  }
+
   websocket = i.oberknechtEmitterWebsocketClient[this.symbol];
 
   emitter = new oberknechtEmitter();
@@ -189,7 +193,7 @@ export class oberknechtEmitterClient {
         .catch(reject);
     });
   }
-  
+
   async emitCB(eventName: string | string[], data: any) {
     return new Promise((resolve, reject) => {
       this.sendWC({

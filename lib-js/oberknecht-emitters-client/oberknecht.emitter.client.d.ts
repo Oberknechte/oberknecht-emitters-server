@@ -6,6 +6,7 @@ export declare class oberknechtEmitterClient {
     get symbol(): string;
     get _options(): oberknechtEmitterClientOptions;
     set _options(options: oberknechtEmitterClientOptions);
+    get isConnected(): boolean;
     websocket: WebSocket;
     emitter: oberknechtEmitter;
     constructor(options: oberknechtEmitterClientOptions);
